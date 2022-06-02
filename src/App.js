@@ -7,7 +7,6 @@ import 'firebase/compat/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { async } from '@firebase/util';
 
 firebase.initializeApp({
   apiKey: "AIzaSyD1FPTFzVZipyBe8-IdNoBvLvHXD9F193M",
@@ -29,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <header>
-
+        <SignOut />
       </header>
 
       <section>
@@ -66,13 +65,13 @@ function Posts() {
 
   const [formValue, setFormValue] = useState('');
 
-  const postPost = async(e) => {
+  const postPost = (e) => {
 
     e.preventDefault();
 
     const { uid, photoURL } = auth.currentUser;
 
-    await postsRef.add({
+      postsRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid, 
@@ -101,12 +100,11 @@ function Posts() {
 function Post(props) {
   const { text, uid, photoURL } = props.post;
 
-  const postClass = uid === auth.currentUser.uid ? 'send' : 'received';
-
   return (
-    <div className={`post ${postClass}`}>
+    <div>
       <img src={photoURL} alt='pfp'/>
-      <p>{text}</p>
+      <h1 className='text-3xl font-bold underline'>{text}</h1>
+      <p>{uid}</p>
     </div>
   )
 }

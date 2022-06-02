@@ -1,7 +1,7 @@
-# Getting Started with Create React App
+# Da-Social
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+ A social media platform similar to instagram made in React.js + Firebase 
+ 
 ## Available Scripts
 
 In the project directory, you can run:

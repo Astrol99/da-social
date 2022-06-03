@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import Button from 'react-bootstrap/Button'
+// React-Bootstrap
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
+// Firebase
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
 
+// Firestore
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { ButtonGroup } from 'react-bootstrap';
 
+// Init firebase
 firebase.initializeApp({
   apiKey: "AIzaSyD1FPTFzVZipyBe8-IdNoBvLvHXD9F193M",
   authDomain: "da-social-1fa05.firebaseapp.com",
@@ -34,12 +38,14 @@ function App() {
         <SignOut/>
       </header>
       <section>
-        {user ? <Posts /> : <SignIn/>}
+        {/* Only load posts when user is logged in */}
+        {user ? <Feed /> : <SignIn/>}
       </section>
     </div>
   );
 }
 
+// SignInWithGoogle Component
 function SignIn() {
 
   const signInWithGoogle = () => {
@@ -63,24 +69,31 @@ function SignOut() {
   )
 }
 
-function Posts() {
+// Main post feed
+function Feed() {
 
+  // Retrieve posts from firebase db
   const postsRef = firestore.collection('posts');
   const query = postsRef.orderBy('createdAt', 'desc').limit(25);
 
-  const [posts] = useCollectionData(query, { idField: 'id' });
+  const [feed] = useCollectionData(query, { idField: 'id' });
 
+  // Form inputs state from user to post posts
   const [formValue, setFormValue] = useState('');
   const [mediaValue, setMediaValue] = useState('');
 
+  // Post posts
   const postPost = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page refresh
 
+    // Prevent posting empty posts
     if (!formValue)
       return
 
+      // Get user data of current user
     const { uid, photoURL, displayName } = auth.currentUser;
 
+    // Post to database with following metadata
     await postsRef.add({
       username: displayName,
       text: formValue,
@@ -90,29 +103,35 @@ function Posts() {
       photoURL
     });
 
+    // Reset form inputs
     setFormValue('');
     setMediaValue('');
   }
 
+  // Handle image paste into input by converting into base64
   const handlePaste = (e) => {
     const items = (e.clipboardData || e.originalEvent.clipboardData).items;
     for (var index in items) {
-        var item = items[index];
+        const item = items[index];
         if (item.kind === 'file') {
-          var blob = item.getAsFile();
-          var reader = new FileReader();
+          const blob = item.getAsFile();
+          const reader = new FileReader();
           reader.onload = function (event) {
-              setMediaValue(event.target.result); // data url!
+              // Set media state value
+              setMediaValue(event.target.result); // base64 data url!
           };
           reader.readAsDataURL(blob);
         }
     }
   };
 
+  // Main post feed structure
   return (
     <>
+    {/* User form input */}
     <form className='form' onSubmit={postPost}>
 
+      { /* Text and media input */ }
       <input 
         className='input' 
         placeholder='Type something...' 
@@ -121,7 +140,9 @@ function Posts() {
         onChange={(e) => setFormValue(e.target.value)} 
       />
       
+      { /* Form Buttons */}
       <ButtonGroup>
+        { /* Post button  */}
         <Button
           variant='primary' 
           style={{ paddingLeft: 10, paddingRight: 10 }} 
@@ -129,39 +150,56 @@ function Posts() {
         >
           &gt;
         </Button>
+        { /* TODO: File attachment button */ }
       </ButtonGroup>
       
     </form>
+
+    { /* Preview attached files */ }
     <div className='preview'>
+      { /* Image preview and removable on click */ }
       <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
     </div>
-    <div className='posts'>
-      {posts && posts.map(post => <Post key={post.id} post={post} />)}
+
+    { /* Main feed of posts */ }
+    <div className='feed'>
+      { /* Create post component for each post in feed */ }
+      {feed && feed.map(post => <Post key={post.id} post={post} />)}
     </div>
     </>
   )
 }
 
 function Post(props) {
-  const { username, text, media, photoURL, createdAt } = props.post;
-  let postDate;
-  if (createdAt)
-    postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
+  // Get metadata of post
+  const { username, photoURL, text, media, createdAt } = props.post;
+
+  // Get post date if metadata is available
+  const postDate = createdAt ? 
+    new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' })
+    : null;
   
+  // Individual post struct
   return (
     <div className='post'>
 
+      { /* Header with user pfp + username */ }
       <div className='header'>
         <img className='pfp' src={photoURL} alt='pfp'/>
         <h4>{username}</h4>
-        
       </div>
-        <div className='content'>
+
+      { /* Main content body */ }
+      <div className='content'>
           <p>{text}</p>
-        </div>
+      </div>
+
+      { /* Attached media */ }
       <div className='media'>
         <img src={media} alt='' />
       </div>
+
+      { /* Date metadata */ }
       <small style={{ float: 'right', margin: 5 }}>{postDate}</small>
 
     </div>

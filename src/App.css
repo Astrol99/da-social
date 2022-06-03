@@ -16,15 +16,12 @@
   width: 500px;
 }
 
-button {
-  transition-duration: 0.4s;
-}
-
 button:hover {
   background-color: aqua;
 }
 
 button {
+  transition-duration: 0.4s;
   background-color: dodgerblue;
   border-color: black;
   border-style: solid;
@@ -32,6 +29,19 @@ button {
   color: white;
   text-align: center;
   font-size: 12px;
+}
+
+img {
+  max-width:100%;
+  max-height:auto;
+}
+
+.preview {
+  display: flex;
+  flex-direction: row;
+  max-width:10%;
+  display: block;
+  margin: auto;
 }
 
 .posts {

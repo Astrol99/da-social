@@ -68,6 +68,7 @@ function Posts() {
   const [posts] = useCollectionData(query, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
+  const [mediaValue, setMediaValue] = useState('');
 
   const postPost = async (e) => {
     e.preventDefault();
@@ -79,23 +80,44 @@ function Posts() {
 
     await postsRef.add({
       text: formValue,
+      media: mediaValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid, 
+      uid,
       photoURL
     });
 
     setFormValue('');
+    setMediaValue('');
   }
+
+  const handlePaste = (e) => {
+    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    for (var index in items) {
+        var item = items[index];
+        if (item.kind === 'file') {
+          var blob = item.getAsFile();
+          var reader = new FileReader();
+          reader.onload = function (event) {
+              setMediaValue(event.target.result); // data url!
+          };
+          reader.readAsDataURL(blob);
+        }
+    }
+  };
 
   return (
     <>
     <form className='form' onSubmit={postPost}>
 
-      <input className='input' value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+      <input className='input' onPaste={handlePaste} value={formValue} onChange={(e) => setFormValue(e.target.value)} />
 
       <button style={{ paddingLeft: 10, paddingRight: 10 }} type='submit'>&gt;</button>
 
+      
     </form>
+    <div className='preview'>
+      <img src={mediaValue} alt=''/>
+    </div>
     <div className='posts'>
       {posts && posts.map(post => <Post key={post.id} post={post} />)}
     </div>
@@ -104,7 +126,7 @@ function Posts() {
 }
 
 function Post(props) {
-  const { text, photoURL, createdAt } = props.post;
+  const { text, media, photoURL, createdAt } = props.post;
   let postDate;
   if (createdAt)
     postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
@@ -117,8 +139,8 @@ function Post(props) {
         <p>{text}</p>
       </div>
 
-      <div className='content'>
-        test
+      <div className='media'>
+        <img src={media} alt='' />
       </div>
       <small style={{ float: 'right', margin: 5 }}>{postDate}</small>
 

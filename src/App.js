@@ -65,13 +65,15 @@ function Posts() {
   const postsRef = firestore.collection('posts');
   const query = postsRef.orderBy('createdAt', 'desc').limit(25);
 
-  const [posts] = useCollectionData(query, {idField: 'id'});
+  const [posts] = useCollectionData(query, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
 
   const postPost = async (e) => {
-
     e.preventDefault();
+
+    if (!formValue)
+      return
 
     const { uid, photoURL } = auth.currentUser;
 
@@ -94,17 +96,19 @@ function Posts() {
       <button style={{ paddingLeft: 10, paddingRight: 10 }} type='submit'>&gt;</button>
 
     </form>
-      <div className='posts'>
-        {posts && posts.map(post => <Post key={post.id} post={post} />)}
-      </div>
+    <div className='posts'>
+      {posts && posts.map(post => <Post key={post.id} post={post} />)}
+    </div>
     </>
   )
 }
 
 function Post(props) {
   const { text, photoURL, createdAt } = props.post;
-  const postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
-
+  let postDate;
+  if (createdAt)
+    postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
+  
   return (
     <div className='post'>
 

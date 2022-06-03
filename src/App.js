@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
 
+import Button from 'react-bootstrap/Button'
+
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { ButtonGroup } from 'react-bootstrap';
 
 firebase.initializeApp({
   apiKey: "AIzaSyD1FPTFzVZipyBe8-IdNoBvLvHXD9F193M",
@@ -31,7 +34,7 @@ function App() {
         <SignOut/>
       </header>
       <section>
-        {user ? <Posts /> : <SignIn />}
+        {user ? <Posts /> : <SignIn/>}
       </section>
     </div>
   );
@@ -45,18 +48,18 @@ function SignIn() {
   }
 
   return (
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+      <Button onClick={signInWithGoogle}>Sign in with Google</Button>
   );
 }
 
 function SignOut() {
   return auth.currentUser && (
-    <button 
+    <Button 
       onClick={() => auth.signOut()} 
       style={{padding: 10, fontSize: 14, margin: 10, width: 500, borderRadius: 7}}
     >
       Sign Out
-    </button>
+    </Button>
   )
 }
 
@@ -110,10 +113,23 @@ function Posts() {
     <>
     <form className='form' onSubmit={postPost}>
 
-      <input className='input' placeholder='Type something...' onPaste={handlePaste} value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-
-      <button style={{ paddingLeft: 10, paddingRight: 10 }} type='submit'>&gt;</button>
-
+      <input 
+        className='input' 
+        placeholder='Type something...' 
+        onPaste={handlePaste} 
+        value={formValue} 
+        onChange={(e) => setFormValue(e.target.value)} 
+      />
+      
+      <ButtonGroup>
+        <Button
+          variant='primary' 
+          style={{ paddingLeft: 10, paddingRight: 10 }} 
+          type='submit'
+        >
+          &gt;
+        </Button>
+      </ButtonGroup>
       
     </form>
     <div className='preview'>

@@ -11,26 +11,6 @@
   justify-content: center;
 }
 
-.input {
-  padding: 7px;
-  width: 500px;
-}
-
-button:hover {
-  background-color: aqua;
-}
-
-button {
-  transition-duration: 0.4s;
-  background-color: dodgerblue;
-  border-color: black;
-  border-style: solid;
-  border-width: 1px;
-  color: white;
-  text-align: center;
-  font-size: 12px;
-}
-
 img {
   transition-duration: 0.4s;
   max-width:100%;

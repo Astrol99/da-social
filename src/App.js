@@ -117,7 +117,7 @@ function Posts() {
       
     </form>
     <div className='preview'>
-      <img src={mediaValue} alt=''/>
+      <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
     </div>
     <div className='posts'>
       {posts && posts.map(post => <Post key={post.id} post={post} />)}

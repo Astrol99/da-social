@@ -32,8 +32,13 @@ button {
 }
 
 img {
+  transition-duration: 0.4s;
   max-width:100%;
   max-height:auto;
+}
+
+img:hover {
+  filter: brightness(50%);
 }
 
 .preview {
@@ -42,6 +47,7 @@ img {
   max-width:10%;
   display: block;
   margin: auto;
+  margin-top: 10px;
 }
 
 .posts {

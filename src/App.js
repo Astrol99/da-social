@@ -103,7 +103,7 @@ function Post(props) {
   return (
     <div>
       <img src={photoURL} alt='pfp'/>
-      <h1 className='text-3xl font-bold underline'>{text}</h1>
+      <h1>{text}</h1>
       <p>{uid}</p>
     </div>
   )

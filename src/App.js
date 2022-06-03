@@ -28,9 +28,8 @@ function App() {
   return (
     <div className="App">
       <header>
-        <SignOut />
+        <SignOut/>
       </header>
-
       <section>
         {user ? <Posts /> : <SignIn />}
       </section>
@@ -52,7 +51,12 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <button 
+      onClick={() => auth.signOut()} 
+      style={{padding: 10, fontSize: 14, margin: 10, width: 500, borderRadius: 7}}
+    >
+      Sign Out
+    </button>
   )
 }
 
@@ -65,13 +69,13 @@ function Posts() {
 
   const [formValue, setFormValue] = useState('');
 
-  const postPost = (e) => {
+  const postPost = async (e) => {
 
     e.preventDefault();
 
     const { uid, photoURL } = auth.currentUser;
 
-      postsRef.add({
+    await postsRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid, 
@@ -87,7 +91,7 @@ function Posts() {
 
       <input className='input' value={formValue} onChange={(e) => setFormValue(e.target.value)} />
 
-      <button type='submit'>POST</button>
+      <button style={{ paddingLeft: 10, paddingRight: 10 }} type='submit'>&gt;</button>
 
     </form>
       <div className='posts'>

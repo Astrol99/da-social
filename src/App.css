@@ -2,20 +2,46 @@
   text-align: center;
 }
 
+.form {
+  display: flex;
+  flex-direction: row;
+  max-width: 500px;
+  margin: auto;
+}
+
+.input {
+  padding: 5px;
+  margin: 10px;
+  width: 400px;
+}
+
+button {
+  background-color: dodgerblue;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+}
+
 .posts {
   display: flex;
   flex-direction: column;
   max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
 }
 
 .post {
+  outline-width: 1px;
   outline-style: solid;
   outline-color: black;
   border-radius: 7px;
-  max-width: inherit;
   margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .pfp {
@@ -25,7 +51,3 @@
   margin: 10px;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-}

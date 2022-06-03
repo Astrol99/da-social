@@ -59,7 +59,7 @@ function SignOut() {
 function Posts() {
 
   const postsRef = firestore.collection('posts');
-  const query = postsRef.orderBy('createdAt').limit(25);
+  const query = postsRef.orderBy('createdAt', 'desc').limit(25);
 
   const [posts] = useCollectionData(query, {idField: 'id'});
 
@@ -83,9 +83,9 @@ function Posts() {
 
   return (
     <>
-    <form onSubmit={postPost}>
+    <form className='form' onSubmit={postPost}>
 
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+      <input className='input' value={formValue} onChange={(e) => setFormValue(e.target.value)} />
 
       <button type='submit'>POST</button>
 
@@ -98,7 +98,8 @@ function Posts() {
 }
 
 function Post(props) {
-  const { text, photoURL } = props.post;
+  const { text, photoURL, createdAt } = props.post;
+  const postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
 
   return (
     <div className='post'>
@@ -111,6 +112,7 @@ function Post(props) {
       <div className='content'>
         test
       </div>
+      <small style={{ float: 'right', margin: 5 }}>{postDate}</small>
 
     </div>
   )

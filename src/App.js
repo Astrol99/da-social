@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import './App.css';
 
 // React-Bootstrap
-import { Button, ButtonGroup, Container, Form, Navbar } from 'react-bootstrap';
-import { ArrowRight, ArrowBarUp, Google } from 'react-bootstrap-icons';
+import { 
+  Button, 
+  ButtonGroup, 
+  Container, 
+  Form, 
+  Navbar 
+} from 'react-bootstrap';
+
+import { 
+  ArrowRight, 
+  ArrowBarUp, 
+  Google 
+} from 'react-bootstrap-icons';
 
 // Firebase
 import firebase from 'firebase/compat/app';

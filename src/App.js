@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 // React-Bootstrap
-import { Button, ButtonGroup } from 'react-bootstrap';
-import { ArrowRight, ArrowBarUp } from 'react-bootstrap-icons';
+import { Button, ButtonGroup, Container, Form, Navbar, Stack } from 'react-bootstrap';
+import { ArrowRight, ArrowBarUp, Google } from 'react-bootstrap-icons';
 
 // Firebase
 import firebase from 'firebase/compat/app';
@@ -33,15 +33,20 @@ function App() {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="App">
-      <header>
-        <SignOut/>
-      </header>
-      <section>
-        {/* Only load posts when user is logged in */}
-        {user ? <Feed /> : <SignIn/>}
-      </section>
+    <>
+    <Navbar bg='light'>
+      <Container>
+        <Navbar.Brand href="#home">Da Social</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+          {user ? <SignOut /> : <SignIn />}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+    <div className='h-100 d-flex justify-content-center'>
+        {user ? <Feed /> : <h1>Please Sign In</h1>}
     </div>
+    </>
   );
 }
 
@@ -54,18 +59,23 @@ function SignIn() {
   }
 
   return (
-      <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+      <Button onClick={signInWithGoogle}>
+        <Google style={{margin: 5}}/>
+        Sign in with Google
+      </Button>
   );
 }
 
 function SignOut() {
   return auth.currentUser && (
-    <Button 
-      onClick={() => auth.signOut()} 
-      style={{padding: 10, fontSize: 14, margin: 10, width: 500, borderRadius: 7}}
-    >
-      Sign Out
-    </Button>
+    <div>
+      <Navbar.Text style={{marginRight: 10}}>
+        Signed in as: <a href="#login">{auth.currentUser.displayName}</a>
+      </Navbar.Text>
+      <Button onClick={() => auth.signOut()}>
+        Sign Out
+      </Button>
+    </div>
   )
 }
 
@@ -129,16 +139,18 @@ function Feed() {
   return (
     <>
     {/* User form input */}
-    <form className='form' onSubmit={postPost}>
+    <Form Submit={postPost}>
 
       { /* Text and media input */ }
-      <input 
-        className='input' 
-        placeholder='Type something...' 
-        onPaste={handlePaste} 
-        value={formValue} 
-        onChange={(e) => setFormValue(e.target.value)} 
-      />
+      <Form.Group controlID='input'>
+        <Form.Control
+          as='textarea'
+          placeholder='Type something...' 
+          onPaste={handlePaste} 
+          value={formValue} 
+          onChange={(e) => setFormValue(e.target.value)} 
+        />
+      </Form.Group>
       
       { /* Form Buttons */}
       <ButtonGroup>
@@ -153,19 +165,19 @@ function Feed() {
         
       </ButtonGroup>
       
-    </form>
+    </Form>
 
     { /* Preview attached files */ }
-    <div className='preview'>
+    <div>
       { /* Image preview and removable on click */ }
       <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
     </div>
 
     { /* Main feed of posts */ }
-    <div className='feed'>
+    <Stack>
       { /* Create post component for each post in feed */ }
       {feed && feed.map(post => <Post key={post.id} post={post} />)}
-    </div>
+    </Stack>
     </>
   )
 }
@@ -181,26 +193,26 @@ function Post(props) {
   
   // Individual post struct
   return (
-    <div className='post'>
+    <div>
 
       { /* Header with user pfp + username */ }
-      <div className='header'>
-        <img className='pfp' src={photoURL} alt='pfp'/>
+      <div>
+        <img src={photoURL} alt='pfp'/>
         <h4>{username}</h4>
       </div>
 
       { /* Main content body */ }
-      <div className='content'>
+      <div>
           <p>{text}</p>
       </div>
 
       { /* Attached media */ }
-      <div className='media'>
+      <div>
         <img src={media} alt='' />
       </div>
 
       { /* Date metadata */ }
-      <small style={{ float: 'right', margin: 5 }}>{postDate}</small>
+      <small>{postDate}</small>
 
     </div>
   )

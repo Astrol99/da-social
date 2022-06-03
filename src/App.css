@@ -1,67 +1,6 @@
-.App {
-  text-align: center;
-}
-
-.form {
+.centered {
+  height: 100vh; /* Magic here */
   display: flex;
-  flex-direction: row;
-  width: 500px;
-  max-width: 500px;
-  margin: auto;
   justify-content: center;
-}
-
-img {
-  transition-duration: 0.4s;
-  max-width:100%;
-  max-height:auto;
-}
-
-img:hover {
-  filter: brightness(50%);
-}
-
-.preview {
-  display: flex;
-  flex-direction: row;
-  max-width:10%;
-  display: block;
-  margin: auto;
-  margin-top: 10px;
-}
-
-.feed {
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin: auto;
-}
-
-.post {
-  outline-width: 1px;
-  outline-style: solid;
-  outline-color: black;
-  border-radius: 7px;
-  margin-top: 20px;
-}
-
-.header {
-  display: flex;
-  flex-direction: row;
   align-items: center;
 }
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 70px;
-}
-
-.pfp {
-  width: 3em;
-  height: 3em;
-  clip-path: circle();
-  margin: 10px;
-}
-

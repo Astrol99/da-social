@@ -90,7 +90,7 @@ function Posts() {
       <button type='submit'>POST</button>
 
     </form>
-      <div>
+      <div className='posts'>
         {posts && posts.map(post => <Post key={post.id} post={post} />)}
       </div>
     </>
@@ -98,13 +98,20 @@ function Posts() {
 }
 
 function Post(props) {
-  const { text, uid, photoURL } = props.post;
+  const { text, photoURL } = props.post;
 
   return (
-    <div>
-      <img src={photoURL} alt='pfp'/>
-      <h1>{text}</h1>
-      <p>{uid}</p>
+    <div className='post'>
+
+      <div className='header'>
+        <img className='pfp' src={photoURL} alt='pfp'/>
+        <p>{text}</p>
+      </div>
+
+      <div className='content'>
+        test
+      </div>
+
     </div>
   )
 }

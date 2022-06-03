@@ -41,9 +41,13 @@ const firestore = firebase.firestore();
 function App() {
 
   const [user] = useAuthState(auth);
+  const postsRef = firestore.collection('posts');
+  const query = postsRef.orderBy('createdAt', 'desc').limit(25);
+  const [feed] = useCollectionData(query, { idField: 'id' });
 
   return (
     <>
+    { /*  Navbar */ }
     <Navbar bg='light'>
       <Container>
         <Navbar.Brand href="#home">Da Social</Navbar.Brand>
@@ -53,8 +57,14 @@ function App() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    <div className='h-100 d-flex justify-content-center'>
-        {user ? <Feed /> : <h1>Please Sign In</h1>}
+
+    { /* Main body */ }
+    <div className='h-100 d-flex flex-column align-items-center'>
+      { /* Post Form Input */ }
+      { user ? <PostInput className='m-5' postsRef={postsRef}/> : null }
+
+      { /* Feed */ }
+      <Feed feed={feed}/>
     </div>
     </>
   );
@@ -140,10 +150,9 @@ function PostInput(props) {
   return (
     <>
     {/* User form input */}
-    <Form Submit={postPost}>
-
+    <Form>
     { /* Text and media input */ }
-    <Form.Group controlID='input'>
+    <Form.Group>
       <Form.Control
         as='textarea'
         placeholder='Type something...' 
@@ -160,7 +169,7 @@ function PostInput(props) {
         <ArrowBarUp />
       </Button>
       { /* Post button  */}
-      <Button type='submit'>
+      <Button type='submit' onClick={postPost}>
         <ArrowRight />
       </Button>
       
@@ -178,25 +187,15 @@ function PostInput(props) {
 }
 
 // Main post feed
-function Feed() {
-
-  // Retrieve posts from firebase db
-  const postsRef = firestore.collection('posts');
-  const query = postsRef.orderBy('createdAt', 'desc').limit(25);
-
-  const [feed] = useCollectionData(query, { idField: 'id' });
-
+function Feed(props) {
   // Main post feed structure
   return (
     <>
-    { /* User post input */ }
-    <PostInput postsRef={postsRef}/>
-
     { /* Main feed of posts */ }
     { /* Create post component for each post in feed */ }
-    {feed && feed.map(post => <Post key={post.id} post={post} />)}
+    {props.feed && props.feed.map(post => <Post key={post.id} post={post} />)}
     </>
-  )
+  );
 }
 
 function Post(props) {

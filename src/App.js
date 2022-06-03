@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 // React-Bootstrap
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { Button, ButtonGroup } from 'react-bootstrap';
+import { ArrowRight, ArrowBarUp } from 'react-bootstrap-icons';
 
 // Firebase
 import firebase from 'firebase/compat/app';
@@ -142,15 +142,15 @@ function Feed() {
       
       { /* Form Buttons */}
       <ButtonGroup>
-        { /* Post button  */}
-        <Button
-          variant='primary' 
-          style={{ paddingLeft: 10, paddingRight: 10 }} 
-          type='submit'
-        >
-          &gt;
+        { /* File attachment button */ }
+        <Button type='submit'>
+          <ArrowBarUp />
         </Button>
-        { /* TODO: File attachment button */ }
+        { /* Post button  */}
+        <Button type='submit'>
+          <ArrowRight />
+        </Button>
+        
       </ButtonGroup>
       
     </form>

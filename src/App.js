@@ -76,9 +76,10 @@ function Posts() {
     if (!formValue)
       return
 
-    const { uid, photoURL } = auth.currentUser;
+    const { uid, photoURL, displayName } = auth.currentUser;
 
     await postsRef.add({
+      username: displayName,
       text: formValue,
       media: mediaValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -109,7 +110,7 @@ function Posts() {
     <>
     <form className='form' onSubmit={postPost}>
 
-      <input className='input' onPaste={handlePaste} value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+      <input className='input' placeholder='Type something...' onPaste={handlePaste} value={formValue} onChange={(e) => setFormValue(e.target.value)} />
 
       <button style={{ paddingLeft: 10, paddingRight: 10 }} type='submit'>&gt;</button>
 
@@ -126,7 +127,7 @@ function Posts() {
 }
 
 function Post(props) {
-  const { text, media, photoURL, createdAt } = props.post;
+  const { username, text, media, photoURL, createdAt } = props.post;
   let postDate;
   if (createdAt)
     postDate = new Date(createdAt.seconds*1000).toLocaleString('en-us', { timeZone: 'UTC' });
@@ -136,9 +137,12 @@ function Post(props) {
 
       <div className='header'>
         <img className='pfp' src={photoURL} alt='pfp'/>
-        <p>{text}</p>
+        <h4>{username}</h4>
+        
       </div>
-
+        <div className='content'>
+          <p>{text}</p>
+        </div>
       <div className='media'>
         <img src={media} alt='' />
       </div>

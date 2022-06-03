@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 // React-Bootstrap
-import { Button, ButtonGroup, Container, Form, Navbar, Stack } from 'react-bootstrap';
+import { Button, ButtonGroup, Container, Form, Navbar } from 'react-bootstrap';
 import { ArrowRight, ArrowBarUp, Google } from 'react-bootstrap-icons';
 
 // Firebase
@@ -70,7 +70,7 @@ function SignOut() {
   return auth.currentUser && (
     <div>
       <Navbar.Text style={{marginRight: 10}}>
-        Signed in as: <a href="#login">{auth.currentUser.displayName}</a>
+        Signed in as: <a href="#login">{auth.currentUser.email}</a>
       </Navbar.Text>
       <Button onClick={() => auth.signOut()}>
         Sign Out
@@ -79,15 +79,7 @@ function SignOut() {
   )
 }
 
-// Main post feed
-function Feed() {
-
-  // Retrieve posts from firebase db
-  const postsRef = firestore.collection('posts');
-  const query = postsRef.orderBy('createdAt', 'desc').limit(25);
-
-  const [feed] = useCollectionData(query, { idField: 'id' });
-
+function PostInput(props) {
   // Form inputs state from user to post posts
   const [formValue, setFormValue] = useState('');
   const [mediaValue, setMediaValue] = useState('');
@@ -104,7 +96,7 @@ function Feed() {
     const { uid, photoURL, displayName } = auth.currentUser;
 
     // Post to database with following metadata
-    await postsRef.add({
+    await props.postsRef.add({
       username: displayName,
       text: formValue,
       media: mediaValue,
@@ -135,49 +127,64 @@ function Feed() {
     }
   };
 
-  // Main post feed structure
   return (
     <>
     {/* User form input */}
     <Form Submit={postPost}>
 
-      { /* Text and media input */ }
-      <Form.Group controlID='input'>
-        <Form.Control
-          as='textarea'
-          placeholder='Type something...' 
-          onPaste={handlePaste} 
-          value={formValue} 
-          onChange={(e) => setFormValue(e.target.value)} 
-        />
-      </Form.Group>
+    { /* Text and media input */ }
+    <Form.Group controlID='input'>
+      <Form.Control
+        as='textarea'
+        placeholder='Type something...' 
+        onPaste={handlePaste} 
+        value={formValue} 
+        onChange={(e) => setFormValue(e.target.value)} 
+      />
+    </Form.Group>
+    
+    { /* Form Buttons */}
+    <ButtonGroup>
+      { /* File attachment button */ }
+      <Button type='submit'>
+        <ArrowBarUp />
+      </Button>
+      { /* Post button  */}
+      <Button type='submit'>
+        <ArrowRight />
+      </Button>
       
-      { /* Form Buttons */}
-      <ButtonGroup>
-        { /* File attachment button */ }
-        <Button type='submit'>
-          <ArrowBarUp />
-        </Button>
-        { /* Post button  */}
-        <Button type='submit'>
-          <ArrowRight />
-        </Button>
-        
-      </ButtonGroup>
-      
-    </Form>
+    </ButtonGroup>
+    
+  </Form>
 
-    { /* Preview attached files */ }
-    <div>
-      { /* Image preview and removable on click */ }
-      <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
-    </div>
+  { /* Preview attached files */ }
+  <div>
+    { /* Image preview and removable on click */ }
+    <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
+  </div>
+  </>
+  );
+}
+
+// Main post feed
+function Feed() {
+
+  // Retrieve posts from firebase db
+  const postsRef = firestore.collection('posts');
+  const query = postsRef.orderBy('createdAt', 'desc').limit(25);
+
+  const [feed] = useCollectionData(query, { idField: 'id' });
+
+  // Main post feed structure
+  return (
+    <>
+    { /* User post input */ }
+    <PostInput postsRef={postsRef}/>
 
     { /* Main feed of posts */ }
-    <Stack>
-      { /* Create post component for each post in feed */ }
-      {feed && feed.map(post => <Post key={post.id} post={post} />)}
-    </Stack>
+    { /* Create post component for each post in feed */ }
+    {feed && feed.map(post => <Post key={post.id} post={post} />)}
     </>
   )
 }

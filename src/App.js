@@ -6,7 +6,10 @@ import {
   ButtonGroup, 
   Container, 
   Form, 
-  Navbar 
+  Navbar,
+  Image,
+  Card,
+  Stack
 } from 'react-bootstrap';
 
 import { 
@@ -59,12 +62,15 @@ function App() {
     </Navbar>
 
     { /* Main body */ }
-    <div className='h-100 d-flex flex-column align-items-center'>
-      { /* Post Form Input */ }
-      { user ? <PostInput className='m-5' postsRef={postsRef}/> : null }
-
-      { /* Feed */ }
-      <Feed feed={feed}/>
+    <div className='d-flex justify-content-center'>
+      <Stack gap={3} style={{maxWidth: 500}}>
+        <div className='m-4'>
+          { /* Post Form Input */ }
+          { user ? <PostInput postsRef={postsRef}/> : null }
+          { /* Feed */ }
+          <Feed feed={feed}/>
+        </div>
+      </Stack>
     </div>
     </>
   );
@@ -192,8 +198,10 @@ function Feed(props) {
   return (
     <>
     { /* Main feed of posts */ }
-    { /* Create post component for each post in feed */ }
-    {props.feed && props.feed.map(post => <Post key={post.id} post={post} />)}
+    <Stack gap={3}>
+      { /* Create post component for each post in feed */ }
+      {props.feed && props.feed.map(post => <Post key={post.id} post={post} />)}
+    </Stack>
     </>
   );
 }
@@ -209,28 +217,22 @@ function Post(props) {
   
   // Individual post struct
   return (
-    <div>
-
-      { /* Header with user pfp + username */ }
-      <div>
-        <img src={photoURL} alt='pfp'/>
-        <h4>{username}</h4>
-      </div>
-
-      { /* Main content body */ }
-      <div>
-          <p>{text}</p>
-      </div>
-
-      { /* Attached media */ }
-      <div>
-        <img src={media} alt='' />
-      </div>
-
-      { /* Date metadata */ }
-      <small>{postDate}</small>
-
-    </div>
+    <Card>
+      <Card.Header>
+        <Image 
+          style={{width: 40, height: 40, marginRight: 10}} 
+          roundedCircle={true} 
+          src={photoURL} 
+          alt='pfp' 
+        />
+        {username}
+      </Card.Header>
+      <Card.Body>
+        <Card.Text>{text}</Card.Text>
+        { media ? <Image thumbnail={true} src={media} /> : null }
+        <Card.Footer>{postDate}</Card.Footer>
+      </Card.Body>
+  </Card>
   )
 }
 

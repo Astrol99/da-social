@@ -154,41 +154,50 @@ function PostInput(props) {
   };
 
   return (
-    <>
-    {/* User form input */}
-    <Form>
-    { /* Text and media input */ }
-    <Form.Group>
-      <Form.Control
-        as='textarea'
-        placeholder='Type something...' 
-        onPaste={handlePaste} 
-        value={formValue} 
-        onChange={(e) => setFormValue(e.target.value)} 
-      />
-    </Form.Group>
-    
-    { /* Form Buttons */}
-    <ButtonGroup>
-      { /* File attachment button */ }
-      <Button type='submit'>
-        <ArrowBarUp />
-      </Button>
-      { /* Post button  */}
-      <Button type='submit' onClick={postPost}>
-        <ArrowRight />
-      </Button>
+    <div>
+      {/* User form input */}
+      <Form>
+      { /* Text and media input */ }
+      <Form.Group>
+        <Form.Control
+          as='textarea'
+          placeholder='Type something...' 
+          onPaste={handlePaste} 
+          value={formValue} 
+          onChange={(e) => setFormValue(e.target.value)} 
+        />
+      </Form.Group>
       
-    </ButtonGroup>
-    
-  </Form>
+      { /* Form Buttons */}
+      <ButtonGroup className='mt-2'>
+        { /* File attachment button */ }
+        <Button type='submit'>
+          <ArrowBarUp />
+        </Button>
+        { /* Post button  */}
+        <Button type='submit' onClick={postPost}>
+          <ArrowRight />
+        </Button>
+        
+      </ButtonGroup>
+      
+    </Form>
 
-  { /* Preview attached files */ }
-  <div>
-    { /* Image preview and removable on click */ }
-    <img src={mediaValue} alt='' onClick={() => setMediaValue('')}/>
+    { /* Preview attached files */ }
+    <div className='mt-2 mb-2'>
+      { /* Image preview and removable on click */ }
+      <Image 
+        src={mediaValue} 
+        alt='' 
+        onClick={() => setMediaValue('')} 
+        rounded='true'
+        style={{
+          width: 100,
+          maxWidth: 100
+        }}
+      />
+    </div>
   </div>
-  </>
   );
 }
 
